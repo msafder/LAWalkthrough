@@ -68,13 +68,14 @@
   scrollView.showsHorizontalScrollIndicator = NO;
   scrollView.showsVerticalScrollIndicator = NO;
   scrollView.scrollsToTop = NO;
+    scrollView.bounces = NO;
   scrollView.delegate = self;
   [self.view addSubview:scrollView];
   
-  pageControl = [self createPageControl];
-  [pageControl addTarget:self action:@selector(changePage) forControlEvents:UIControlEventValueChanged];
-  pageControl.currentPage = 0;
-  [self.view addSubview:pageControl];
+  self.pageControl = [self createPageControl];
+  [self.pageControl addTarget:self action:@selector(changePage) forControlEvents:UIControlEventValueChanged];
+  self.pageControl.currentPage = 0;
+  [self.view addSubview:self.pageControl];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -88,8 +89,8 @@
   scrollView.frame = self.view.frame;
   scrollView.contentSize = CGSizeMake(scrollView.frame.size.width * self.numberOfPages, scrollView.frame.size.height);
   
-  pageControl.frame = self.pageControlFrame;
-  pageControl.numberOfPages = self.numberOfPages;
+  self.pageControl.frame = self.pageControlFrame;
+  self.pageControl.numberOfPages = self.numberOfPages;
   
   BOOL useDefaultNextButton = !(self.nextButtonImage || self.nextButtonText);
   if (useDefaultNextButton)
@@ -183,13 +184,13 @@
 
 - (void)displayNextPage
 {
-  pageControl.currentPage++;
+  self.pageControl.currentPage++;
   [self changePage];
 }
 
 - (void)changePage
 {
-  NSInteger pageIndex = pageControl.currentPage;
+  NSInteger pageIndex = self.pageControl.currentPage;
   
   // update the scroll view to the appropriate page
   CGRect frame = scrollView.frame;
@@ -213,12 +214,12 @@
 
 - (CGPoint)nextButtonOrigin
 {
-  return CGPointMake(pageControl.frame.size.width - self.nextButton.frame.size.width, pageControl.frame.origin.y);
+  return CGPointMake(self.pageControl.frame.size.width - self.nextButton.frame.size.width, self.pageControl.frame.origin.y);
 }
 
 - (CGRect)pageControlFrame
 {
-  CGSize pagerSize = [pageControl sizeForNumberOfPages:self.numberOfPages];
+  CGSize pagerSize = [self.pageControl sizeForNumberOfPages:self.numberOfPages];
   
   return CGRectMake(0,
                     scrollView.frame.size.height - self.pageControlBottomMargin - pagerSize.height,
@@ -239,14 +240,14 @@
   int nextPage = floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
   
   // Hide the Next button when this is the last page
-  self.nextButton.hidden = nextPage == (pageControl.numberOfPages-1);
+  self.nextButton.hidden = nextPage == (self.pageControl.numberOfPages-1);
 
   if (pageControlUsed)
   {
     return;
   }
 
-  pageControl.currentPage = nextPage;
+  self.pageControl.currentPage = nextPage;
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
