@@ -257,7 +257,9 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-  pageControlUsed = NO;
+    pageControlUsed = NO;
+    
+    [self.delegate pageDidChange];
 }
 
 @end
