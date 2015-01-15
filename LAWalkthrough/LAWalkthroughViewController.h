@@ -25,6 +25,14 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol LAWalkthroughDelegate
+
+@optional
+
+-(void)pageDidChange;
+
+@end
+
 @interface LAWalkthroughViewController : UIViewController <UIPageViewControllerDelegate, UIScrollViewDelegate>
 {
   UIScrollView *scrollView;
@@ -42,6 +50,8 @@
 @property (nonatomic,readonly) CGRect pageControlFrame;
 @property (nonatomic,readonly,copy) NSArray *pages;
 @property (nonatomic, retain) UIPageControl *pageControl;
+
+@property id <LAWalkthroughDelegate> delegate;
 
 
 - (UIView *)addPageWithBody:(NSString *)bodyText;
